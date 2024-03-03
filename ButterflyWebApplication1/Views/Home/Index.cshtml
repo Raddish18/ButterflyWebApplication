@@ -1,0 +1,142 @@
+﻿
+@section Scripts {
+    <script type="text/javascript">
+
+        function append(val) {
+            document.getElementById("result").value += val
+        }
+
+        //key inputs
+        function myFunction(event) {
+            if (event.key == '0' || event.key == '1'
+                || event.key == '2' || event.key == '3'
+                || event.key == '4' || event.key == '5'
+                || event.key == '6' || event.key == '7'
+                || event.key == '8' || event.key == '9'
+                || event.key == '+' || event.key == '-'
+                || event.key == '*' || event.key == '/')
+                document.getElementById("result").value += event.key;
+        }
+
+        //handle enter key solve
+        var calc = document.getElementById("calculator");
+        calc.onkeyup = function (event) {
+            if (event.keyCode === 13) {
+                solve();
+            }
+        }
+       
+        //POST Request for our math controller to solve our equation.
+        function solve() {
+            const expression = $('#result').val();
+
+            $.ajax({
+                url: '/api/math/calculate',
+                method: 'POST',
+                data: JSON.stringify(expression),
+                contentType: 'application/json',
+                success: function (data) {
+                    document.getElementById("result").value = `${data}`;
+                },
+                error: function (error) {
+                    console.error('Error calculating expression:', error);
+                }
+            });
+        }
+
+
+        // Function that clears the appendplay box
+        function clr() {
+            document.getElementById("result").value = ""
+        } 
+
+    </script>
+}
+<header>
+    <div class="content-wrapper">
+        <div class="float-left">
+        </div>
+    </div>
+</header>
+<div id="body">
+    <section class="content-wrapper main-content clear-fix">
+        <table id="calculator">
+            <tr>
+                <td colspan="3"><input type="text" id="result"></td>
+                <td><input type="button" value="c" onclick="clr()" /> </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="1" onclick="append('1')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="2" onclick="append('2')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="3" onclick="append('3')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="/" onclick="append('/')"
+                           onkeydown="myFunction(event)">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="4" onclick="append('4')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="5" onclick="append('5')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="6" onclick="append('6')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="*" onclick="append('*')"
+                           onkeydown="myFunction(event)">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="7" onclick="append('7')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="8" onclick="append('8')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="9" onclick="append('9')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="-" onclick="append('-')"
+                           onkeydown="myFunction(event)">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="0" onclick="append('0')"
+                           onkeydown="myFunction(event)">
+                </td>
+                <td>
+                    <input type="button" value="." onclick="append('.')"
+                           onkeydown="myFunction(event)">
+                </td>
+
+                <td><input type="button" value="=" onclick="solve()"> </td>
+
+                <td>
+                    <input type="button" value="+" onclick="append('+')"
+                           onkeydown="myFunction(event)">
+                </td>
+            </tr>
+        </table>
+        <h3 id="message" />
+    </section>
+</div>
